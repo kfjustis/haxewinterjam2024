@@ -11,7 +11,6 @@ class SetupState extends FlxState
 		super.create();
 
 		applyGameSettings();
-
 		FlxG.switchState(new PlayState());
 	}
 
