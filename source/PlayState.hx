@@ -11,11 +11,15 @@ import flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState
 {
-	var _debugHud:FlxCamera;
+	var _debugCam:FlxCamera;
 	var _debugLine:FlxSprite;
 
 	var _background:FlxSprite;
+	var _leftArrow:FlxSprite;
+	var _rightArrow:FlxSprite;
+
 	var _charCam:FlxCamera;
+	var _uiCam:FlxCamera;
 
 	override public function create()
 	{
@@ -40,26 +44,20 @@ class PlayState extends FlxState
 		FlxG.watch.add(_background, "x", "bg.x");
 		FlxG.watch.add(_background, "y", "bg.y");
 
-		// Add character cam.
-		_charCam = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		FlxG.cameras.add(_charCam, false);
-		_charCam.bgColor = 0x0;
+		addCharacterLayerCam();
+		addUiLayerCam();
 
 		// Add cat.
 		var catBoss = new CatBoss();
 		add(catBoss);
 		catBoss.camera = _charCam;
 
+		addUiArrows();
+
 		// Add debug center lines on a separate cam.
 		#if debug
-		_debugHud = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		FlxG.cameras.add(_debugHud, false);
-		_debugHud.bgColor = 0x0;
-
-		_debugLine = new FlxSprite();
-		_debugLine.makeGraphic(FlxG.width, FlxG.height);
-		add(_debugLine);
-		_debugLine.camera = _debugHud;
+		addDebugLayerCam();
+		addDebugLines();
 		#end
 	}
 
@@ -76,8 +74,16 @@ class PlayState extends FlxState
 
 	private function scrollCamera()
 	{
-		var left:Bool = FlxG.keys.anyPressed([LEFT, A]);
-		var right:Bool = FlxG.keys.anyPressed([RIGHT, D]);
+		var leftKey:Bool = FlxG.keys.anyPressed([LEFT, A]);
+		var rightKey:Bool = FlxG.keys.anyPressed([RIGHT, D]);
+
+		var mouseClicked:Bool = FlxG.mouse.pressed;
+		var leftButton:Bool = (_leftArrow.overlapsPoint(FlxG.mouse.getViewPosition()) && mouseClicked);
+		var rightButton:Bool = (_rightArrow.overlapsPoint(FlxG.mouse.getViewPosition()) && mouseClicked);
+
+		// Aggregate the buttons / keys into a single direction.
+		var left:Bool = (leftKey || leftButton);
+		var right:Bool = (rightKey || rightButton);
 
 		if (left && right)
 			left = right = false;
@@ -117,5 +123,49 @@ class PlayState extends FlxState
 			thickness: 1.0,
 			color: LINE_COLOR
 		});
+	}
+
+	private function addCharacterLayerCam()
+	{
+		_charCam = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		FlxG.cameras.add(_charCam, false);
+		_charCam.bgColor = 0x0;
+	}
+
+	private function addUiLayerCam()
+	{
+		_uiCam = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		FlxG.cameras.add(_uiCam, false);
+		_uiCam.bgColor = 0x0;
+	}
+
+	private function addDebugLayerCam()
+	{
+		_debugCam = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		FlxG.cameras.add(_debugCam, false);
+		_debugCam.bgColor = 0x0;
+	}
+
+	private function addDebugLines()
+	{
+		_debugLine = new FlxSprite();
+		_debugLine.makeGraphic(FlxG.width, FlxG.height);
+		add(_debugLine);
+		_debugLine.camera = _debugCam;
+	}
+
+	private function addUiArrows()
+	{
+		// Add left and right arrows.
+		_leftArrow = new FlxSprite();
+		_leftArrow.loadGraphic("assets/images/ui_arrow_left.png");
+		add(_leftArrow);
+		_leftArrow.camera = _uiCam;
+
+		_rightArrow = new FlxSprite();
+		_rightArrow.loadGraphic("assets/images/ui_arrow_right.png");
+		add(_rightArrow);
+		_rightArrow.camera = _uiCam;
+		_rightArrow.x = FlxG.width - _rightArrow.width;
 	}
 }

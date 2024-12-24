@@ -3,7 +3,7 @@ import flixel.FlxSprite;
 
 class CatBoss extends FlxSprite
 {
-	final ORIGIN_X:Float = 10;
+	final ORIGIN_X:Float = 75;
 	final ORIGIN_Y:Float = 250;
 
 	override public function new()
