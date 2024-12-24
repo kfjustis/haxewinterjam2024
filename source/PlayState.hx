@@ -1,6 +1,7 @@
 package;
 
 import CatBoss;
+import Textbox;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -51,6 +52,15 @@ class PlayState extends FlxState
 		var catBoss = new CatBoss();
 		add(catBoss);
 		catBoss.camera = _charCam;
+
+		// Add textbox.
+		var textbox = new Textbox();
+		add(textbox);
+		textbox.camera = _uiCam;
+		textbox.addElements(this);
+		textbox.setCamera(_uiCam);
+		textbox.attachCharacter(catBoss);
+		textbox.playText("some text goes here with wrapping I suppose. lets see if we can get to three lines.");
 
 		addUiArrows();
 
