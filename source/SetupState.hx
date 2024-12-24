@@ -17,6 +17,6 @@ class SetupState extends FlxState
 	private function applyGameSettings()
 	{
 		// Set scale mode.
-		FlxG.scaleMode = new PixelPerfectScaleMode();
+		// FlxG.scaleMode = new PixelPerfectScaleMode();
 	}
 }

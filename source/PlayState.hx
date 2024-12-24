@@ -1,5 +1,6 @@
 package;
 
+import CatBoss;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -13,8 +14,8 @@ class PlayState extends FlxState
 	var _debugHud:FlxCamera;
 	var _debugLine:FlxSprite;
 
-	var _groupLevel:FlxTypedGroup<FlxSprite>;
 	var _background:FlxSprite;
+	var _charCam:FlxCamera;
 
 	override public function create()
 	{
@@ -26,21 +27,28 @@ class PlayState extends FlxState
 		_background = new FlxSprite();
 		_background.loadGraphic("assets/images/level_debug.png");
 		_background.x = -640;
-		_groupLevel = new FlxTypedGroup<FlxSprite>();
-		_groupLevel.add(_background);
+		add(_background);
 
 		// Test adding an object to the group relative to the background.
 		var sprite:FlxSprite = new FlxSprite();
 		sprite.makeGraphic(64, 64, FlxColor.BLUE);
 		sprite.x = (640 / 2) - 32;
 		sprite.y = 480 / 2 - 32;
-		_groupLevel.add(sprite);
+		add(sprite);
 
 		// Track bg in debugger.
 		FlxG.watch.add(_background, "x", "bg.x");
 		FlxG.watch.add(_background, "y", "bg.y");
 
-		add(_groupLevel);
+		// Add character cam.
+		_charCam = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		FlxG.cameras.add(_charCam, false);
+		_charCam.bgColor = 0x0;
+
+		// Add cat.
+		var catBoss = new CatBoss();
+		add(catBoss);
+		catBoss.camera = _charCam;
 
 		// Add debug center lines on a separate cam.
 		#if debug
