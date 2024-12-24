@@ -36,6 +36,7 @@ class Textbox extends FlxSprite
 		FlxG.watch.add(_typeText, "x", "text.x");
 		FlxG.watch.add(_typeText, "y", "text.y");
 		_typeText.camera = camera;
+		_typeText.useDefaultSound = true;
 		_typeText.x = x + 10;
 		_typeText.y = y + 10;
 
