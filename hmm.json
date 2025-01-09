@@ -19,6 +19,11 @@
       "name": "lime",
       "type": "haxelib",
       "version": null
+    },
+    {
+      "name": "openfl",
+      "type": "haxelib",
+      "version": "9.4.0"
     }
   ]
 }
